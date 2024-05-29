@@ -5,19 +5,27 @@ import styles from "./PostsList.module.css";
 import Model from "./Model";
 
 function PostsList({ isPosting, onStopPosting }) {
-  const [enteredBody, setEnteredBody] = useState("Welcome");
-  const [enteredAuthor, setEnteredAuthor] = useState("Who are you?");
+  const [posts, setPosts] = useState([]);
 
-  // these guys set the state for both pieces when they are triggered from the NewPost Child
-  function BodyChangeHandler(event) {
-    setEnteredBody(event.target.value);
+  function addPostHandler(postData) {
+    // look into what spread operator does.
+    //This is not good because if update state and new state is based on previsou state value.
+    // you should actually pass a function to set post .  This function will be call automacticall by react when every you call setPost and this
+    //function will acutomatically receive current state and you will return a new state.
+    setPosts([setPosts, ...posts]);
+
+    // Just remember if new state depends on old state.. use a function to update
+    // state and you get the old state automatically and you can return the new value.
+    //setPosts((existingPosts) => [postData, ...existingPosts]);
+
+    //consoling posts you can clearly see that every time you submit, the first time,
+    //posts is empty but after that every item entered has the previous post added.
+    // this is because of the spread operator.
+    // also you want to item that is submitted, its in postData.
+    //Not sure what existing post is. ***
+    console.log(posts);
+    console.log(postData);
   }
-
-  function authorChangeHandler(event) {
-    setEnteredAuthor(event.target.value);
-  }
-
-  let modalState;
 
   return (
     // isPosting is the flag sent over to see if youshow modal or not.
@@ -25,16 +33,21 @@ function PostsList({ isPosting, onStopPosting }) {
       {isPosting ? (
         // onStopPosting sends the functoin to hide the modal.
         <Model onBodyClick={onStopPosting}>
-          <NewPost
-            onBodyChange={BodyChangeHandler}
-            onAuthorChange={authorChangeHandler}
-            onCancel={onStopPosting}
-          />
+          <NewPost onCancel={onStopPosting} onAddPost={addPostHandler} />
         </Model>
       ) : null}
-      <ul className={styles.posts}>
-        <Post author={enteredAuthor} body={enteredBody} />
-      </ul>
+      {posts.length > 0 ? (
+        <ul className={styles.posts}>
+          {posts.map((post, index) => (
+            <Post key={index} author={post.author} body={post.body} />
+          ))}
+        </ul>
+      ) : (
+        <div style={{ textAlign: "center", color: "white" }}>
+          <h2>There are no posts yet.</h2>
+          <p>Please start adding some.</p>
+        </div>
+      )}
     </>
   );
 }
