@@ -12,11 +12,11 @@ function PostsList({ isPosting, onStopPosting }) {
     //This is not good because if update state and new state is based on previsou state value.
     // you should actually pass a function to set post .  This function will be call automacticall by react when every you call setPost and this
     //function will acutomatically receive current state and you will return a new state.
-    setPosts([setPosts, ...posts]);
+    // setPosts([setPosts, ...posts]);
 
     // Just remember if new state depends on old state.. use a function to update
     // state and you get the old state automatically and you can return the new value.
-    //setPosts((existingPosts) => [postData, ...existingPosts]);
+    setPosts((existingPosts) => [postData, ...existingPosts]);
 
     //consoling posts you can clearly see that every time you submit, the first time,
     //posts is empty but after that every item entered has the previous post added.
