@@ -8,6 +8,15 @@ function PostsList({ isPosting, onStopPosting }) {
   const [posts, setPosts] = useState([]);
 
   function addPostHandler(postData) {
+    // Nice example of a POST request. Fetch sends data back.
+    // By default a fetch is set to a GET request. So add method to it.
+    fetch("http://localhost:8080/posts", {
+      method: "POST",
+      body: JSON.stringify(postData),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
     // look into what spread operator does.
     //This is not good because if update state and new state is based on previsou state value.
     // you should actually pass a function to set post .  This function will be call automacticall by react when every you call setPost and this
@@ -19,14 +28,13 @@ function PostsList({ isPosting, onStopPosting }) {
     // state and you get the old state automatically and you can return the new value.
     setPosts((existingPosts) => [postData, ...existingPosts]);
 
-
     //consoling posts you can clearly see that every time you submit, the first time,
     //posts is empty but after that every item entered has the previous post added.
     // this is because of the spread operator.
     // also you want to item that is submitted, its in postData.
     //Not sure what existing post is. ***
-    console.log(posts);
-    console.log(postData);
+    console.log("I am posts", posts);
+    console.log("I am postData", postData);
   }
 
   return (
