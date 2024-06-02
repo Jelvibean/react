@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
-import NewPost from "./NewPost";
 import Post from "./Post";
 import styles from "./PostsList.module.css";
-import Model from "./Model";
 
-function PostsList({ isPosting, onStopPosting }) {
+function PostsList() {
   const [posts, setPosts] = useState([]);
   const [isFetching, setIsFetching] = useState(false);
 
@@ -58,13 +56,6 @@ function PostsList({ isPosting, onStopPosting }) {
   return (
     // isPosting is the flag sent over to see if youshow modal or not.
     <>
-      {isPosting ? (
-        // onStopPosting sends the functoin to hide the modal.
-        <Model onBodyClick={onStopPosting}>
-          <NewPost onCancel={onStopPosting} onAddPost={addPostHandler} />
-        </Model>
-      ) : null}
-
       {!isFetching && posts.length > 0 && (
         <ul className={styles.posts}>
           {posts.map((post, index) => (
