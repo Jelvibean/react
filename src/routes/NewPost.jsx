@@ -1,8 +1,10 @@
 import { useState } from "react";
 import classes from "./NewPost.module.css";
+import Model from "../components/Model";
+import { Link } from "react-router-dom";
 
 // both onBodyChange, onAuthorChange are functions passed to be triggered on the onChange events
-function NewPost({ onCancel, onAddPost }) {
+function NewPost({ onAddPost }) {
   const [enteredBody, setEnteredBody] = useState("Welcome");
   const [enteredAuthor, setEnteredAuthor] = useState("Who are you?");
 
@@ -31,31 +33,32 @@ function NewPost({ onCancel, onAddPost }) {
 
   return (
     // onsubmit handler.
-    <form className={classes.form} onSubmit={onSubmitHandler}>
-      <p>
-        <label htmlFor="body">Text</label>
-        <textarea id="body" required rows={3} onChange={BodyChangeHandler} />
-      </p>
+    <Model>
+      <form className={classes.form} onSubmit={onSubmitHandler}>
+        <p>
+          <label htmlFor="body">Text</label>
+          <textarea id="body" required rows={3} onChange={BodyChangeHandler} />
+        </p>
 
-      <p>
-        <label htmlFor="name">Your name</label>
-        <input
-          type="text"
-          id="name"
-          required
-          autoComplete="off"
-          onChange={authorChangeHandler}
-        />
-      </p>
-      <p className={classes.actions}>
-        {/* by default a button in a form will submt.. so add type=button so this button doesnt  */}
-        {/* Leave button for submit alone since again by default it will submit.  */}
-        <button type="button" onClick={onCancel}>
-          Cancel
-        </button>
-        <button>Submit</button>
-      </p>
-    </form>
+        <p>
+          <label htmlFor="name">Your name</label>
+          <input
+            type="text"
+            id="name"
+            required
+            autoComplete="off"
+            onChange={authorChangeHandler}
+          />
+        </p>
+        <p className={classes.actions}>
+          {/* here I used "/" just to keep it simple */}
+          <Link to=".." type="button">
+            Cancel
+          </Link>
+          <button>Submit</button>
+        </p>
+      </form>
+    </Model>
   );
 }
 
