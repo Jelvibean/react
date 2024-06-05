@@ -1,27 +1,9 @@
-import { useEffect, useState } from "react";
 import Post from "./Post";
 import styles from "./PostsList.module.css";
+import { useLoaderData } from "react-router-dom";
 
 function PostsList() {
-  const [posts, setPosts] = useState([]);
-  const [isFetching, setIsFetching] = useState(false);
-
-  //Reason for this useEffect is because you need to have this happen on the side.
-  //You cant do it with just fetch and update state because it would cause infinite
-  //loop.  Since every time you update state this function  PostList would execute
-  //and there for would be trigger update over and over.
-  // useEffect has two params,  function and array as seen below
-  useEffect(() => {
-    async function fetchPosts() {
-      setIsFetching(true);
-      const response = await fetch("http://localhost:8080/posts");
-      const resData = await response.json();
-
-      setPosts(resData.posts);
-      setIsFetching(false);
-    }
-    fetchPosts();
-  }, []);
+  const posts = useLoaderData();
 
   function addPostHandler(postData) {
     // Nice example of a POST request. Fetch sends data back.
@@ -56,22 +38,17 @@ function PostsList() {
   return (
     // isPosting is the flag sent over to see if youshow modal or not.
     <>
-      {!isFetching && posts.length > 0 && (
+      {posts.length > 0 && (
         <ul className={styles.posts}>
           {posts.map((post, index) => (
             <Post key={index} author={post.author} body={post.body} />
           ))}
         </ul>
       )}
-      {!isFetching && posts.length === 0 && (
+      {posts.length === 0 && (
         <div style={{ textAlign: "center", color: "white" }}>
           <h2>There are no posts yet.</h2>
           <p>Please start adding some.</p>
-        </div>
-      )}
-      {isFetching && (
-        <div style={{ textAlign: "center", color: "white" }}>
-          <p>Loading ....</p>
         </div>
       )}
     </>
